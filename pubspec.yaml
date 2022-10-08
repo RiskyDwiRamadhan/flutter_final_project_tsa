@@ -1,0 +1,38 @@
+name: flutter_final_project_tsa
+description: A new Flutter project.
+
+publish_to: 'none' 
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.6 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+    
+  cupertino_icons: ^1.0.2
+  auto_size_text: 3.0.0
+  cached_network_image: 3.2.1
+  flutter_animate: 1.0.0
+  font_awesome_flutter: 10.1.0
+  from_css_color: 2.0.0
+  google_fonts: 3.0.1
+  intl: 0.17.0
+  json_path: 0.4.1
+  page_transition: 2.0.4
+  shared_preferences: 2.0.15
+  timeago: 3.2.2
+  url_launcher: 6.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+    
+  flutter_lints: ^2.0.0
+  
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/images/

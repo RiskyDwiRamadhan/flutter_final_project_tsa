@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_final_project_tsa/widget/gambar.dart';
+import 'package:flutter_final_project_tsa/widget/profile.dart';
 import 'widget/splash_screen.dart';
 import 'widget/login.dart';
 import 'widget/register.dart';
 import 'widget/kosakata.dart';
+import 'widget/reading.dart';
+import 'widget/listening.dart';
+import 'widget/profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,9 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: KosakataWidget(
-        title: 'Kosa Kata',
-      ),
+      home: SplashScreenPage(),
     );
   }
 }

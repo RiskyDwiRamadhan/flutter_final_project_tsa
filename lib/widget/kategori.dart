@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+import 'reading.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({Key? key, required this.title}) : super(key: key);
@@ -95,7 +96,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: () => Navigator.of(context)
+                .pushReplacement(MaterialPageRoute(builder: (_) {
+              return ReadingWidget(
+                title: 'Reading',
+              );
+            })),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [

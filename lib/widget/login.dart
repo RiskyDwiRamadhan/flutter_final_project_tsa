@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'register.dart';
-import 'katefori.dart';
+import 'kategori.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -169,7 +169,9 @@ class _LoginScreenState extends State<LoginScreen> {
           elevation: 5.0,
           onPressed: () => Navigator.of(context)
               .pushReplacement(MaterialPageRoute(builder: (_) {
-            return HomePage();
+            return HomePageWidget(
+              title: 'KATEGORI',
+            );
           })),
           padding: EdgeInsets.all(15.0),
           shape: RoundedRectangleBorder(

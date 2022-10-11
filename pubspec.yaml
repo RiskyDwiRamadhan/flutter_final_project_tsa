@@ -12,6 +12,12 @@ dependencies:
     sdk: flutter
     
   cupertino_icons: ^1.0.2
+  firebase_core: ^1.20.0
+  firebase_auth: ^3.5.1
+  cloud_firestore: ^3.4.0
+  flutterfire_ui: ^0.4.3
+  google_sign_in: ^5.4.0
+  
   auto_size_text: 3.0.0
   cached_network_image: 3.2.1
   flutter_animate: 1.0.0

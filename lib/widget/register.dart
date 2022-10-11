@@ -1,14 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterScreen extends StatefulWidget {
+  final VoidCallback showLoginPage;
+  const RegisterScreen({Key? key, required this.showLoginPage})
+      : super(key: key);
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _rememberMe = false;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  Future signUp() async {
+    if (passwordConfirmed()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+    }
+  }
+
+  bool passwordConfirmed() {
+    if (_passwordController.text.trim() ==
+        _confirmPasswordController.text.trim()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   final kHintTextStyle = TextStyle(
     color: Color.fromARGB(19, 53, 53, 10),
@@ -46,41 +79,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildUserTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Username',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextField(
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
-              color: Color.fromARGB(101, 0, 0, 0),
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.account_circle_outlined,
-                color: Color.fromARGB(19, 53, 53, 10),
-              ),
-              hintText: 'Enter your Email',
-              hintStyle: kHintTextStyle,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,6 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Color.fromARGB(101, 0, 0, 0),
@@ -130,6 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: _passwordController,
             obscureText: true,
             style: TextStyle(
               color: Color.fromARGB(101, 0, 0, 0),
@@ -143,6 +143,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 color: Color.fromARGB(19, 53, 53, 10),
               ),
               hintText: 'Enter your Password',
+              hintStyle: kHintTextStyle,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConfirmPasswordTF() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Confirm Password',
+          style: kLabelStyle,
+        ),
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 60.0,
+          child: TextField(
+            controller: _confirmPasswordController,
+            obscureText: true,
+            style: TextStyle(
+              color: Color.fromARGB(101, 0, 0, 0),
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.lock,
+                color: Color.fromARGB(19, 53, 53, 10),
+              ),
+              hintText: 'Confirm Password',
               hintStyle: kHintTextStyle,
             ),
           ),
@@ -200,7 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
+        onPressed: signUp,
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -222,10 +258,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _buildSigninBtn() {
     return GestureDetector(
-      onTap: () =>
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        return LoginScreen();
-      })),
+      onTap: widget.showLoginPage,
       child: RichText(
         text: TextSpan(
           children: [
@@ -282,7 +315,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       SizedBox(height: 30.0),
                       _buildLogo(),
-                      _buildUserTF(),
                       SizedBox(
                         height: 30.0,
                       ),
@@ -291,6 +323,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 30.0,
                       ),
                       _buildPasswordTF(),
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      _buildConfirmPasswordTF(),
                       _buildForgotPasswordBtn(),
                       _buildRememberMeCheckbox(),
                       _buildLoginBtn(),

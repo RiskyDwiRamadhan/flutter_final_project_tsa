@@ -1,103 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_final_project_tsa/model/kata.dart';
+import 'package:flutter_final_project_tsa/network/network_request.dart';
 
-class KosakataWidget extends StatefulWidget {
-  const KosakataWidget({Key? key, required this.title}) : super(key: key);
-  final String title;
+import '../cell/grid_cell.dart';
+
+class KosaKataWidget extends StatefulWidget {
+  const KosaKataWidget({Key? key}) : super(key: key);
 
   @override
-  _KosakataWidgetState createState() => _KosakataWidgetState();
+  State<KosaKataWidget> createState() => _KosaKataWidgetState();
 }
 
-class _KosakataWidgetState extends State<KosakataWidget> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  Widget KataWidget() {
+class _KosaKataWidgetState extends State<KosaKataWidget> {
+  gridView(AsyncSnapshot<List<Kata>> snapshot) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-      child: Container(
-        width: 107,
-        height: 14,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 6,
-              color: Color(0x33000000),
-              offset: Offset(0, 2),
-            )
-          ],
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(9, 5, 9, 0),
-              child: Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: Image.asset(
-                      'assets/images/hot-pot.png',
-                    ).image,
-                  ),
-                  shape: BoxShape.circle,
-                ),
-              ),
+      padding: EdgeInsets.all(5),
+      child: GridView.count(
+        crossAxisCount: 3,
+        childAspectRatio: 1,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        children: snapshot.data!.map((kata) {
+          return GestureDetector(
+            child: GridTile(
+              child: KataCell(kata),
             ),
-            Text(
-              'Soup',
-            ),
-          ],
-        ),
+            onTap: () {
+              gotoDetailpage(context, kata);
+            },
+          );
+        }).toList(),
       ),
+    );
+  }
+
+  gotoDetailpage(BuildContext context, Kata kata) {}
+
+  circularProfress() {
+    return Center(
+      child: CircularProgressIndicator(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: GridView(
-            padding: EdgeInsets.zero,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 0,
-              childAspectRatio: 1,
-            ),
-            scrollDirection: Axis.vertical,
-            children: [
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-              KataWidget(),
-            ],
-          ),
-        ),
+      appBar: AppBar(title: Text('Vocabulary')),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+              child: FutureBuilder<List<Kata>>(
+                  future: NetworkRequest.fetchKatas(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Error ${snapshot.error}");
+                    } else if (snapshot.hasData) {
+                      return gridView(snapshot);
+                    }
+                    return circularProfress();
+                  }))
+        ],
       ),
     );
   }

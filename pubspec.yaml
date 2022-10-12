@@ -17,6 +17,7 @@ dependencies:
   cloud_firestore: ^3.4.0
   flutterfire_ui: ^0.4.3
   google_sign_in: ^5.4.0
+  http: any
   
   auto_size_text: 3.0.0
   cached_network_image: 3.2.1

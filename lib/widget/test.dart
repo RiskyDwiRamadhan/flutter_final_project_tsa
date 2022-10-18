@@ -10,15 +10,15 @@ import 'package:flutter/services.dart';
 import 'reading.dart';
 import 'dart:io';
 
-class HomePageWidget extends StatefulWidget {
-  const HomePageWidget({Key? key, required this.title}) : super(key: key);
+class TestWidget extends StatefulWidget {
+  const TestWidget({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
-  _HomePageWidgetState createState() => _HomePageWidgetState();
+  _TestWidgetState createState() => _TestWidgetState();
 }
 
-class _HomePageWidgetState extends State<HomePageWidget> {
+class _TestWidgetState extends State<TestWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late bool processing;
 

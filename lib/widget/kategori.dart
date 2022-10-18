@@ -28,8 +28,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     processing = false;
   }
 
-  Future<void> openDialog() async {
-    List<Kata> katas = await NetworkRequest.fetchKatas();
+  Future<void> openDialog(String kategori) async {
+    List<Kata> katas = await NetworkRequest.fetchKatas(kategori);
     switch (await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -61,7 +61,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         })) {
       case "Vacabulari":
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-          return KosaKataWidget();
+          return KosaKataWidget(kategori: kategori);
         }));
         break;
       case "Listening":
@@ -72,7 +72,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         }));
         break;
       case "Reading":
-        _startQuizReading();
+        _startQuizReading(kategori);
         break;
     }
   }
@@ -82,7 +82,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       alignment: AlignmentDirectional(0, 0),
       child: GestureDetector(
         onTap: () {
-          openDialog();
+          openDialog(kategori);
         },
         child: Padding(
           padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
@@ -156,12 +156,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     );
   }
 
-  void _startQuizReading() async {
+  void _startQuizReading(String kategori) async {
     setState(() {
       processing = true;
     });
     try {
-      List<Kata> questions = await NetworkRequest.fetchKatas();
+      List<Kata> questions = await NetworkRequest.fetchKatas(kategori);
       await Future.delayed(
         const Duration(seconds: 1),
       );

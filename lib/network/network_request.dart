@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class NetworkRequest {
   static const String url =
-      'https://my-json-server.typicode.com/RiskyDwiRamadhan/tsa_api/hewan';
+      'https://my-json-server.typicode.com/RiskyDwiRamadhan/tsa_api/kosakata';
 
   static List<Kata> parseKata(String responseBody) {
     var list = json.decode(responseBody) as List<dynamic>;
@@ -13,8 +13,8 @@ class NetworkRequest {
     return katas;
   }
 
-  static Future<List<Kata>> fetchKatas() async {
-    final response = await http.get(Uri.parse('$url'));
+  static Future<List<Kata>> fetchKatas(String kategori) async {
+    final response = await http.get(Uri.parse('$url?kategori=$kategori'));
     if (response.statusCode == 200) {
       return compute(parseKata, response.body);
     } else {

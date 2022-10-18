@@ -7,7 +7,8 @@ import 'package:flutter_final_project_tsa/network/network_request.dart';
 import '../cell/grid_cell.dart';
 
 class KosaKataWidget extends StatefulWidget {
-  const KosaKataWidget({Key? key}) : super(key: key);
+  const KosaKataWidget({Key? key, required this.kategori}) : super(key: key);
+  final String kategori;
 
   @override
   State<KosaKataWidget> createState() => _KosaKataWidgetState();
@@ -55,7 +56,7 @@ class _KosaKataWidgetState extends State<KosaKataWidget> {
         children: [
           Flexible(
               child: FutureBuilder<List<Kata>>(
-                  future: NetworkRequest.fetchKatas(),
+                  future: NetworkRequest.fetchKatas(widget.kategori),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return Text("Error ${snapshot.error}");

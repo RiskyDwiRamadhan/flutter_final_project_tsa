@@ -80,7 +80,8 @@ class _ReadingWidgetState extends State<ReadingWidget> {
       iKuis++;
     });
     try {
-      List<Kata> questions = await NetworkRequest.fetchKatas();
+      String kategori = widget.question[0].kategori.toString();
+      List<Kata> questions = await NetworkRequest.fetchKatas(kategori);
       await Future.delayed(
         const Duration(seconds: 1),
       );

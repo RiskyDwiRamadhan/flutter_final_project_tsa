@@ -138,158 +138,125 @@ class _ReadingWidgetState extends State<ReadingWidget> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: const Text(
+              "Are you sure you want to quit the quis?",
+            ),
+            title: const Text("Warning!"),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text("Yes"),
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+              ),
+              ElevatedButton(
+                child: const Text("No"),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Reading"),
-      ),
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(15, 10, 0, 0),
-                  child: Text(
-                    'Pilih Gambar yang Benar!!',
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                Align(
-                  alignment: AlignmentDirectional(-0.95, -0.89),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(5, 5, 0, 20),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Color(0xBC37DAC7),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(7, 7, 7, 7),
-                        child: Image.asset(
-                          sgambar,
-                          width: 2,
-                          height: 100,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: AlignmentDirectional(-0.57, -0.83),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 10),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text("Reading"),
+        ),
+        body: SafeArea(
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(15, 10, 0, 0),
                     child: Text(
-                      bing,
+                      'Pilih Gambar yang Benar!!',
                       textAlign: TextAlign.start,
                     ),
                   ),
-                ), //Jawaban
-                Align(
-                  alignment: AlignmentDirectional(0.9, 0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 400,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(0.9, -0.95),
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                            child: Container(
-                              width: 150,
-                              height: 170,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 6,
-                                    color: Color(0x33000000),
-                                    offset: Offset(0, 2),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _jawaban(pertanyaan[sIndex[0]].toString());
-                                },
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      alignment: AlignmentDirectional(0, -0.8),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            9, 5, 9, 0),
-                                        child: Container(
-                                          width: 120,
-                                          height: 120,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            image: DecorationImage(
-                                              fit: BoxFit.contain,
-                                              image: Image.asset(
-                                                lGambar[sIndex[0]],
-                                              ).image,
-                                            ),
-                                            shape: BoxShape.rectangle,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: AlignmentDirectional(0, 1),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            5, 0, 5, 10),
-                                        child: Text(pertanyaan[sIndex[0]]),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                  Align(
+                    alignment: AlignmentDirectional(-0.95, -0.89),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(5, 5, 0, 20),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Color(0xBC37DAC7),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(7, 7, 7, 7),
+                          child: Image.asset(
+                            sgambar,
+                            width: 2,
+                            height: 100,
+                            fit: BoxFit.contain,
                           ),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional(-0.88, -0.95),
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(5, 10, 0, 0),
-                            child: Container(
-                              width: 150,
-                              height: 170,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 6,
-                                    color: Color(0x33000000),
-                                    offset: Offset(0, 2),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Align(
-                                alignment: AlignmentDirectional(0, -0.95),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional(-0.57, -0.83),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 10),
+                      child: Text(
+                        bing,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ), //Jawaban
+                  Align(
+                    alignment: AlignmentDirectional(0.9, 0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 400,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(0.9, -0.95),
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                              child: Container(
+                                width: 150,
+                                height: 170,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 6,
+                                      color: Color(0x33000000),
+                                      offset: Offset(0, 2),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
                                 child: GestureDetector(
                                   onTap: () {
-                                    _jawaban(pertanyaan[sIndex[1]].toString());
+                                    _jawaban(pertanyaan[sIndex[0]].toString());
                                   },
                                   child: Stack(
                                     children: [
@@ -308,7 +275,138 @@ class _ReadingWidgetState extends State<ReadingWidget> {
                                               image: DecorationImage(
                                                 fit: BoxFit.contain,
                                                 image: Image.asset(
-                                                  lGambar[sIndex[1]],
+                                                  lGambar[sIndex[0]],
+                                                ).image,
+                                              ),
+                                              shape: BoxShape.rectangle,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: AlignmentDirectional(0, 1),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  5, 0, 5, 10),
+                                          child: Text(pertanyaan[sIndex[0]]),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: AlignmentDirectional(-0.88, -0.95),
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(5, 10, 0, 0),
+                              child: Container(
+                                width: 150,
+                                height: 170,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 6,
+                                      color: Color(0x33000000),
+                                      offset: Offset(0, 2),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Align(
+                                  alignment: AlignmentDirectional(0, -0.95),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _jawaban(
+                                          pertanyaan[sIndex[1]].toString());
+                                    },
+                                    child: Stack(
+                                      children: [
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(0, -0.8),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    9, 5, 9, 0),
+                                            child: Container(
+                                              width: 120,
+                                              height: 120,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                image: DecorationImage(
+                                                  fit: BoxFit.contain,
+                                                  image: Image.asset(
+                                                    lGambar[sIndex[1]],
+                                                  ).image,
+                                                ),
+                                                shape: BoxShape.rectangle,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(0.05, 1),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    5, 0, 5, 10),
+                                            child: Text(pertanyaan[sIndex[1]]),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: AlignmentDirectional(-0.88, 0.9),
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(5, 0, 0, 5),
+                              child: Container(
+                                width: 150,
+                                height: 170,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 6,
+                                      color: Color(0x33000000),
+                                      offset: Offset(0, 2),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _jawaban(pertanyaan[sIndex[2]].toString());
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(0, -0.8),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  9, 5, 9, 0),
+                                          child: Container(
+                                            width: 120,
+                                            height: 120,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              image: DecorationImage(
+                                                fit: BoxFit.contain,
+                                                image: Image.asset(
+                                                  lGambar[sIndex[2]],
                                                 ).image,
                                               ),
                                               shape: BoxShape.rectangle,
@@ -323,7 +421,7 @@ class _ReadingWidgetState extends State<ReadingWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   5, 0, 5, 10),
-                                          child: Text(pertanyaan[sIndex[1]]),
+                                          child: Text(pertanyaan[sIndex[2]]),
                                         ),
                                       ),
                                     ],
@@ -332,130 +430,76 @@ class _ReadingWidgetState extends State<ReadingWidget> {
                               ),
                             ),
                           ),
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional(-0.88, 0.9),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 5),
-                            child: Container(
-                              width: 150,
-                              height: 170,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 6,
-                                    color: Color(0x33000000),
-                                    offset: Offset(0, 2),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _jawaban(pertanyaan[sIndex[2]].toString());
-                                },
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      alignment: AlignmentDirectional(0, -0.8),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            9, 5, 9, 0),
-                                        child: Container(
-                                          width: 120,
-                                          height: 120,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            image: DecorationImage(
-                                              fit: BoxFit.contain,
-                                              image: Image.asset(
-                                                lGambar[sIndex[2]],
-                                              ).image,
+                          Align(
+                            alignment: AlignmentDirectional(0.9, 0.9),
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 5, 5),
+                              child: Container(
+                                width: 150,
+                                height: 170,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 6,
+                                      color: Color(0x33000000),
+                                      offset: Offset(0, 2),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _jawaban(pertanyaan[sIndex[3]].toString());
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(0, -0.8),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  9, 5, 9, 0),
+                                          child: Container(
+                                            width: 120,
+                                            height: 120,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              image: DecorationImage(
+                                                fit: BoxFit.contain,
+                                                image: Image.asset(
+                                                  lGambar[sIndex[3]],
+                                                ).image,
+                                              ),
+                                              shape: BoxShape.rectangle,
                                             ),
-                                            shape: BoxShape.rectangle,
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Align(
-                                      alignment: AlignmentDirectional(0.05, 1),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            5, 0, 5, 10),
-                                        child: Text(pertanyaan[sIndex[2]]),
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(0.05, 1),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  5, 0, 5, 10),
+                                          child: Text(pertanyaan[sIndex[3]]),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional(0.9, 0.9),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 5),
-                            child: Container(
-                              width: 150,
-                              height: 170,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 6,
-                                    color: Color(0x33000000),
-                                    offset: Offset(0, 2),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _jawaban(pertanyaan[sIndex[3]].toString());
-                                },
-                                child: Stack(
-                                  children: [
-                                    Align(
-                                      alignment: AlignmentDirectional(0, -0.8),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            9, 5, 9, 0),
-                                        child: Container(
-                                          width: 120,
-                                          height: 120,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            image: DecorationImage(
-                                              fit: BoxFit.contain,
-                                              image: Image.asset(
-                                                lGambar[sIndex[3]],
-                                              ).image,
-                                            ),
-                                            shape: BoxShape.rectangle,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: AlignmentDirectional(0.05, 1),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            5, 0, 5, 10),
-                                        child: Text(pertanyaan[sIndex[3]]),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

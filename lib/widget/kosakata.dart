@@ -47,25 +47,37 @@ class _KosaKataWidgetState extends State<KosaKataWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Vocabulary')),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flexible(
-              child: FutureBuilder<List<Kata>>(
-                  future: NetworkRequest.fetchKatas(widget.kategori),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text("Error ${snapshot.error}");
-                    } else if (snapshot.hasData) {
-                      return gridView(snapshot);
-                    }
-                    return circularProfress();
-                  }))
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        print("Kembali ke menu kategori");
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text('Vocabulary'),
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () => Navigator.pop(context,true ),
+            )),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+                child: FutureBuilder<List<Kata>>(
+                    future: NetworkRequest.fetchKatas(widget.kategori),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text("Error ${snapshot.error}");
+                      } else if (snapshot.hasData) {
+                        return gridView(snapshot);
+                      }
+                      return circularProfress();
+                    }))
+          ],
+        ),
       ),
     );
   }

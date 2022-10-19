@@ -5,6 +5,7 @@ import 'package:flutter_final_project_tsa/widget/error.dart';
 import 'package:flutter_final_project_tsa/widget/gambar.dart';
 import 'package:flutter_final_project_tsa/widget/kosakata.dart';
 import 'package:flutter_final_project_tsa/widget/listening.dart';
+import 'package:flutter_final_project_tsa/widget/test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'reading.dart';
@@ -65,11 +66,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         }));
         break;
       case "Listening":
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-          return ListeningWidget(
-            title: "Listening",
-          );
-        }));
+        _startQuizListening(kategori);
         break;
       case "Reading":
         _startQuizReading(kategori);
@@ -183,7 +180,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         context,
         MaterialPageRoute(
           builder: (_) =>
-              ReadingWidget(question: questions, nKuis: 5, score: 0),
+              ReadingWidget(question: questions, nKuis: 0, score: 0),
         ),
       );
     } on SocketException catch (_) {
@@ -213,29 +210,118 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     });
   }
 
+  void _startQuizListening(String kategori) async {
+    setState(() {
+      processing = true;
+    });
+    try {
+      List<Kata> questions = await NetworkRequest.fetchKatas(kategori);
+      await Future.delayed(
+        const Duration(seconds: 1),
+      );
+      if (!mounted) return;
+      Navigator.pop(context);
+      if (questions.isEmpty) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const ErrorPage(
+              message:
+                  "There are not enough questions in the category, with the options you selected.",
+              key: null,
+            ),
+          ),
+        );
+        return;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => TestWidget(question: questions, nKuis: 0, score: 0),
+        ),
+      );
+    } on SocketException catch (_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ErrorPage(
+            message:
+                "Can't reach the servers, \n Please check your internet connection.",
+          ),
+        ),
+      );
+    } catch (e) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return const ErrorPage(
+              message: "Unexpected error trying to connect to the API",
+            );
+          },
+        ),
+      );
+    }
+    setState(() {
+      processing = false;
+    });
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: const Text(
+              "Are you sure you want to quit the app?",
+            ),
+            title: const Text("Warning!"),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text("Yes"),
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+              ),
+              ElevatedButton(
+                child: const Text("No"),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: GestureDetector(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                _KategoriWidget("Animal", "owl"),
-                _KategoriWidget("Fruit", "fruit"),
-                _KategoriWidget("Food", "hot-pot"),
-                _KategoriWidget("Colors", "palette"),
-                _KategoriWidget("Sport", "sport"),
-                _KategoriWidget("Number", "number-blocks"),
-                _KategoriWidget("Family", "family"),
-                _KategoriWidget("Transport", "transportation"),
-                _KategoriWidget("Alphabet", "abc"),
-                _KategoriWidget("Vegetables", "vegetables"),
-              ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text(widget.title),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () => _onWillPop,
+            )),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: GestureDetector(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  _KategoriWidget("Animal", "owl"),
+                  _KategoriWidget("Fruit", "fruit"),
+                  _KategoriWidget("Food", "hot-pot"),
+                  _KategoriWidget("Colors", "palette"),
+                  _KategoriWidget("Sport", "sport"),
+                  _KategoriWidget("Number", "number-blocks"),
+                  _KategoriWidget("Family", "family"),
+                  _KategoriWidget("Transport", "transportation"),
+                  _KategoriWidget("Alphabet", "abc"),
+                  _KategoriWidget("Vegetables", "vegetables"),
+                ],
+              ),
             ),
           ),
         ),

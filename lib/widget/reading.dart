@@ -110,13 +110,10 @@ class _ReadingWidgetState extends State<ReadingWidget> {
         );
       } else {
         print("Selesai");
-        print("Score = ${widget.score}");
+        print("Score = $scores");
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) =>
-                HomePageWidget(title: "Kategori")
-          ),
+          MaterialPageRoute(builder: (_) => HomePageWidget(title: "Kategori")),
         );
       }
     } on SocketException catch (_) {

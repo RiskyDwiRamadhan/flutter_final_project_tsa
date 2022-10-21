@@ -69,15 +69,15 @@ class _GambarWidgetState extends State<GambarWidget> {
 
   void _jawaban(String jawaban) async {
     if (bi == jawaban) {
-      scores += 10;
+      scores = scores + 10;
     }
     _startQuizReading();
+    iKuis++;
   }
 
   void _startQuizReading() async {
     setState(() {
       processing = true;
-      iKuis++;
     });
     try {
       String kategori = widget.question[0].kategori.toString();
@@ -109,7 +109,7 @@ class _GambarWidgetState extends State<GambarWidget> {
         );
       } else {
         print("Selesai");
-        print("Score = ${widget.score}");
+        print("Score = $scores");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => HomePageWidget(title: "Kategori")),

@@ -115,12 +115,11 @@ class _ListeningWidgetState extends State<ListeningWidget> {
         );
       } else {
         print("Selesai");
-        print("Score = ${widget.score}");
+        print("Score = $scores");
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) =>
-                HomePageWidget(title: "Kategori"),
+            builder: (_) => HomePageWidget(title: "Kategori"),
           ),
         );
       }

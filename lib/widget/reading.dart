@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_tsa/model/kata.dart';
+import 'package:flutter_final_project_tsa/widget/kategori.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:flutter_final_project_tsa/network/network_request.dart';
@@ -110,6 +111,13 @@ class _ReadingWidgetState extends State<ReadingWidget> {
       } else {
         print("Selesai");
         print("Score = ${widget.score}");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                HomePageWidget(title: "Kategori")
+          ),
+        );
       }
     } on SocketException catch (_) {
       Navigator.pushReplacement(

@@ -236,7 +236,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => TestWidget(question: questions, nKuis: 0, score: 0),
+          builder: (_) =>
+              ListeningWidget(question: questions, nKuis: 0, score: 0),
         ),
       );
     } on SocketException catch (_) {

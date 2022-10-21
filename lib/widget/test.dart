@@ -1,18 +1,26 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_final_project_tsa/model/kata.dart';
 import 'package:flutter_final_project_tsa/network/network_request.dart';
 import 'package:flutter_final_project_tsa/widget/error.dart';
-import 'package:flutter_final_project_tsa/widget/gambar.dart';
-import 'package:flutter_final_project_tsa/widget/kosakata.dart';
-import 'package:flutter_final_project_tsa/widget/listening.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/services.dart';
-import 'reading.dart';
-import 'dart:io';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_tts/flutter_tts_web.dart';
 
 class TestWidget extends StatefulWidget {
-  const TestWidget({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const TestWidget(
+      {Key? key,
+      required this.question,
+      required this.score,
+      required this.nKuis})
+      : super(key: key);
+  final List<Kata> question;
+  final int score;
+  final int nKuis;
 
   @override
   _TestWidgetState createState() => _TestWidgetState();
@@ -20,147 +28,64 @@ class TestWidget extends StatefulWidget {
 
 class _TestWidgetState extends State<TestWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final FlutterTts flutterTts = FlutterTts();
+
+  late int iKuis = widget.nKuis;
+  late int scores = widget.score;
+
+  List<int> sIndex = [0, 1, 2, 3];
+  late String bi, bing, sgambar;
+  int indexSoal = Random().nextInt(10);
+  // Pertanyaan ingris ke indo
+  List<String> pertanyaan = [];
+  List<String> lGambar = [];
   late bool processing;
 
   @override
   void initState() {
     super.initState();
     processing = false;
+    soal();
+    pilihan();
   }
 
-  Future<void> openDialog(String kategori) async {
-    List<Kata> katas = await NetworkRequest.fetchKatas(kategori);
-    switch (await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text('Menu'),
-            children: [
-              SimpleDialogOption(
-                child: Text("Vacabulari"),
-                onPressed: () {
-                  Navigator.pop(context, "Vacabulari");
-                },
-              ),
-              SimpleDialogOption(
-                child: Text("Listening"),
-                onPressed: () {
-                  Navigator.pop(context, "Listening");
-                },
-              ),
-              processing
-                  ? const CircularProgressIndicator()
-                  : SimpleDialogOption(
-                      child: Text("Reading"),
-                      onPressed: () {
-                        Navigator.pop(context, "Reading");
-                      },
-                    ),
-            ],
-          );
-        })) {
-      case "Vacabulari":
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-          return KosaKataWidget(kategori: kategori);
-        }));
-        break;
-      case "Listening":
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-          return ListeningWidget(
-            title: "Listening",
-          );
-        }));
-        break;
-      case "Reading":
-        _startQuizReading(kategori);
-        break;
+  void soal() async {
+    this.bi = widget.question[indexSoal].bindo.toString();
+    this.bing = widget.question[indexSoal].bing.toString();
+    this.sgambar = widget.question[indexSoal].gambar.toString();
+    this.pertanyaan.add(widget.question[indexSoal].bindo.toString());
+    this.lGambar.add(widget.question[indexSoal].gambar.toString());
+  }
+
+  void pilihan() async {
+    for (int i = 0; i < 3; i++) {
+      int angka = Random().nextInt(10);
+      if (indexSoal != angka) {
+        pertanyaan.add(widget.question[angka].bindo.toString());
+        lGambar.add(widget.question[angka].gambar.toString());
+      } else {
+        angka = Random().nextInt(10);
+        pertanyaan.add(widget.question[angka].bindo.toString());
+        lGambar.add(widget.question[angka].gambar.toString());
+      }
     }
+    sIndex.shuffle();
   }
 
-  Widget _KategoriWidget(String kategori, String gambar) {
-    return Align(
-      alignment: AlignmentDirectional(0, 0),
-      child: GestureDetector(
-        onTap: () {
-          openDialog(kategori);
-        },
-        child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-          child: Container(
-            width: 330,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 6,
-                  color: Color.fromARGB(144, 56, 56, 56),
-                  // color: Color(0x9037DAC7),
-                  offset: Offset(0, 2),
-                  spreadRadius: 1,
-                )
-              ],
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Align(
-                  alignment: AlignmentDirectional(0, 0),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(10, 5, 5, 5),
-                    child: Container(
-                      width: 70,
-                      height: 70,
-                      padding: EdgeInsetsDirectional.all(10),
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(251, 9, 166, 187),
-                        image: DecorationImage(
-                          fit: BoxFit.contain,
-                          image: Image.asset(
-                            'assets/images/$gambar.png',
-                          ).image,
-                        ),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      kategori,
-                      textAlign: TextAlign.start,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Score : ',
-                        ),
-                        Text(
-                          '10',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+  void _jawaban(String jawaban) async {
+    if (bi == jawaban) {
+      scores += 10;
+    }
+    _startQuizReading();
   }
 
-  void _startQuizReading(String kategori) async {
+  void _startQuizReading() async {
     setState(() {
       processing = true;
+      iKuis++;
     });
     try {
+      String kategori = widget.question[0].kategori.toString();
       List<Kata> questions = await NetworkRequest.fetchKatas(kategori);
       await Future.delayed(
         const Duration(seconds: 1),
@@ -179,13 +104,18 @@ class _TestWidgetState extends State<TestWidget> {
         );
         return;
       }
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) =>
-              ReadingWidget(question: questions, nKuis: 5, score: 0),
-        ),
-      );
+      if (iKuis < 10) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                TestWidget(question: questions, score: scores, nKuis: iKuis),
+          ),
+        );
+      } else {
+        print("Selesai");
+        print("Score = ${widget.score}");
+      }
     } on SocketException catch (_) {
       Navigator.pushReplacement(
         context,
@@ -213,29 +143,236 @@ class _TestWidgetState extends State<TestWidget> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: const Text(
+              "Are you sure you want to quit the quis?",
+            ),
+            title: const Text("Warning!"),
+            actions: <Widget>[
+              ElevatedButton(
+                child: const Text("Yes"),
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+              ),
+              ElevatedButton(
+                child: const Text("No"),
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+              ),
+            ],
+          ),
+        )) ??
+        false;
+  }
+
+  Future _speak() async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1);
+    await flutterTts.speak(bing);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+            title: Text("Listening"),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () => _onWillPop,
+            )),
+        body: SafeArea(
           child: GestureDetector(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                _KategoriWidget("Animal", "owl"),
-                _KategoriWidget("Fruit", "fruit"),
-                _KategoriWidget("Food", "hot-pot"),
-                _KategoriWidget("Colors", "palette"),
-                _KategoriWidget("Sport", "sport"),
-                _KategoriWidget("Number", "number-blocks"),
-                _KategoriWidget("Family", "family"),
-                _KategoriWidget("Transport", "transportation"),
-                _KategoriWidget("Alphabet", "abc"),
-                _KategoriWidget("Vegetables", "vegetables"),
-              ],
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(8, 10, 0, 0),
+                    child: Text(
+                      'Pilih Jawaban Dengan benar!!',
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
+                          child: GestureDetector(
+                            onTap: () => _speak(),
+                            child: Container(
+                              width: 130,
+                              height: 130,
+                              decoration: BoxDecoration(
+                                color: Color(0xBC37DAC7),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 6,
+                                    color: Color(0x33000000),
+                                    offset: Offset(0, 2),
+                                  )
+                                ],
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    20, 20, 20, 20),
+                                child: Image.asset(
+                                  'assets/images/loud-speaker.png',
+                                  width: 2,
+                                  height: 100,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Stack(
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 30, 0, 5),
+                              child: Container(
+                                width: double.infinity,
+                                height: 250,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: 350,
+                                      height: 45,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 10, 0, 0),
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              Color.fromARGB(255, 27, 40, 155),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          _jawaban(
+                                              pertanyaan[sIndex[0]].toString());
+                                        },
+                                        child: Text(
+                                          pertanyaan[sIndex[0]],
+                                          style: TextStyle(
+                                            color: Color(0xffffffff),
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 350,
+                                      height: 45,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 10, 0, 0),
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              Color.fromARGB(255, 27, 40, 155),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          _jawaban(
+                                              pertanyaan[sIndex[1]].toString());
+                                        },
+                                        child: Text(
+                                          pertanyaan[sIndex[1]],
+                                          style: TextStyle(
+                                            color: Color(0xffffffff),
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 350,
+                                      height: 45,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 10, 0, 0),
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              Color.fromARGB(255, 27, 40, 155),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          _jawaban(
+                                              pertanyaan[sIndex[2]].toString());
+                                        },
+                                        child: Text(
+                                          pertanyaan[sIndex[2]],
+                                          style: TextStyle(
+                                            color: Color(0xffffffff),
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 350,
+                                      height: 45,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 10, 0, 0),
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              Color.fromARGB(255, 27, 40, 155),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          _jawaban(
+                                              pertanyaan[sIndex[3]].toString());
+                                        },
+                                        child: Text(
+                                          pertanyaan[sIndex[3]],
+                                          style: TextStyle(
+                                            color: Color(0xffffffff),
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

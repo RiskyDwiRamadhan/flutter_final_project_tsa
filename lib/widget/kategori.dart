@@ -37,24 +37,36 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           return SimpleDialog(
             title: Text('Menu'),
             children: [
-              SimpleDialogOption(
-                child: Text("Vacabulari"),
-                onPressed: () {
-                  Navigator.pop(context, "Vacabulari");
-                },
-              ),
-              SimpleDialogOption(
-                child: Text("Listening"),
-                onPressed: () {
-                  Navigator.pop(context, "Listening");
-                },
-              ),
+              processing
+                  ? const CircularProgressIndicator()
+                  : SimpleDialogOption(
+                      child: Text("Vacabulari"),
+                      onPressed: () {
+                        Navigator.pop(context, "Vacabulari");
+                      },
+                    ),
+              processing
+                  ? const CircularProgressIndicator()
+                  : SimpleDialogOption(
+                      child: Text("Listening"),
+                      onPressed: () {
+                        Navigator.pop(context, "Listening");
+                      },
+                    ),
               processing
                   ? const CircularProgressIndicator()
                   : SimpleDialogOption(
                       child: Text("Reading"),
                       onPressed: () {
                         Navigator.pop(context, "Reading");
+                      },
+                    ),
+              processing
+                  ? const CircularProgressIndicator()
+                  : SimpleDialogOption(
+                      child: Text("Image"),
+                      onPressed: () {
+                        Navigator.pop(context, "Image");
                       },
                     ),
             ],
@@ -70,6 +82,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         break;
       case "Reading":
         _startQuizReading(kategori);
+        break;
+      case "Image":
+        _startQuizImage(kategori);
         break;
     }
   }
@@ -238,6 +253,62 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         MaterialPageRoute(
           builder: (_) =>
               ListeningWidget(question: questions, nKuis: 0, score: 0),
+        ),
+      );
+    } on SocketException catch (_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ErrorPage(
+            message:
+                "Can't reach the servers, \n Please check your internet connection.",
+          ),
+        ),
+      );
+    } catch (e) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return const ErrorPage(
+              message: "Unexpected error trying to connect to the API",
+            );
+          },
+        ),
+      );
+    }
+    setState(() {
+      processing = false;
+    });
+  }
+
+  void _startQuizImage(String kategori) async {
+    setState(() {
+      processing = true;
+    });
+    try {
+      List<Kata> questions = await NetworkRequest.fetchKatas(kategori);
+      await Future.delayed(
+        const Duration(seconds: 1),
+      );
+      if (!mounted) return;
+      Navigator.pop(context);
+      if (questions.isEmpty) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const ErrorPage(
+              message:
+                  "There are not enough questions in the category, with the options you selected.",
+              key: null,
+            ),
+          ),
+        );
+        return;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => GambarWidget(question: questions, nKuis: 0, score: 0),
         ),
       );
     } on SocketException catch (_) {

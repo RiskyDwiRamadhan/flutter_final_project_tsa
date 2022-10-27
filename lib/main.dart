@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_final_project_tsa/widget/ScoreWidget.dart';
 import 'package:flutter_final_project_tsa/widget/kategori.dart';
 import 'package:flutter_final_project_tsa/widget/test.dart';
 import 'firebase_options.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomePageWidget(title: "Kategori"));
+        home: ScoreWidget(
+          score: 40,
+          kategori: 'Animal',
+        ));
   }
 }

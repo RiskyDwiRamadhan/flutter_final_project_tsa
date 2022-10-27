@@ -7,6 +7,7 @@ import 'package:flutter_final_project_tsa/network/network_request.dart';
 import 'package:flutter_final_project_tsa/widget/error.dart';
 import 'package:flutter_final_project_tsa/widget/kategori.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_final_project_tsa/widget/ScoreWidget.dart';
 
 class GambarWidget extends StatefulWidget {
   const GambarWidget(
@@ -112,7 +113,10 @@ class _GambarWidgetState extends State<GambarWidget> {
         print("Score = $scores");
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => HomePageWidget(title: "Kategori")),
+          MaterialPageRoute(builder: (_) => ScoreWidget(
+            score: scores,
+            kategori: kategori,
+          )),
         );
       }
     } on SocketException catch (_) {

@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:flutter_final_project_tsa/network/network_request.dart';
 import 'package:flutter_final_project_tsa/widget/error.dart';
+import 'package:flutter_final_project_tsa/widget/ScoreWidget.dart';
 
 class ReadingWidget extends StatefulWidget {
   const ReadingWidget(
@@ -113,7 +114,11 @@ class _ReadingWidgetState extends State<ReadingWidget> {
         print("Score = $scores");
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => HomePageWidget(title: "Kategori")),
+          MaterialPageRoute(
+              builder: (_) => ScoreWidget(
+                    score: scores,
+                    kategori: kategori,
+                  )),
         );
       }
     } on SocketException catch (_) {

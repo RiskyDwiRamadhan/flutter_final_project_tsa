@@ -11,6 +11,7 @@ import 'package:flutter_final_project_tsa/widget/kategori.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_tts/flutter_tts_web.dart';
+import 'package:flutter_final_project_tsa/widget/ScoreWidget.dart';
 
 class ListeningWidget extends StatefulWidget {
   const ListeningWidget(
@@ -119,8 +120,10 @@ class _ListeningWidgetState extends State<ListeningWidget> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => HomePageWidget(title: "Kategori"),
-          ),
+            builder: (_) => ScoreWidget(
+            score: scores,
+            kategori: kategori,
+          )),
         );
       }
     } on SocketException catch (_) {

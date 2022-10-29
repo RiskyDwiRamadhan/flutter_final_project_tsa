@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,6 +12,7 @@ class ProfileWidget extends StatefulWidget {
 
 class _ProfileWidgetState extends State<ProfileWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +88,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Nama',
+                              'Email',
                             ),
                             Text(
-                              'Risky Dwi Ramadhan',
+                              user.email!,
                             ),
                           ],
                         ),
@@ -109,9 +111,11 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                  },
                   child: Text(
-                    "LogOut",
+                    "Sign Out",
                     style: TextStyle(
                       color: Color(0xffffffff),
                       fontSize: 20,

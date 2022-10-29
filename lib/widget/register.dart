@@ -243,7 +243,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         color: Colors.blue[300],
         child: Text(
-          'REGISTER',
+          'Sign Up',
           style: TextStyle(
             color: Color.fromARGB(255, 255, 255, 255),
             letterSpacing: 1.5,

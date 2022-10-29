@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_final_project_tsa/widget/forgot_pw_page.dart';
 import 'register.dart';
 import 'kategori.dart';
 
@@ -144,41 +145,25 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return ForgotPasswordPage();
+              },
+            ),
+          );
+        },
         padding: EdgeInsets.only(right: 0.0),
         child: Text(
           'Forgot Password?',
-          style: kLabelStyle,
+          style: TextStyle(
+            color: Colors.blue[800],
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildRememberMeCheckbox() {
-    return Container(
-      height: 20.0,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(
-              unselectedWidgetColor: Color.fromARGB(101, 0, 0, 0),
-            ),
-            child: Checkbox(
-              value: _rememberMe,
-              checkColor: Colors.green,
-              activeColor: Colors.white,
-              onChanged: (value) {
-                setState(() {
-                  _rememberMe = value!;
-                });
-              },
-            ),
-          ),
-          Text(
-            'Remember me',
-            style: kLabelStyle,
-          ),
-        ],
       ),
     );
   }
@@ -197,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           color: Colors.blue[300],
           child: Text(
-            'LOGIN',
+            'Sign In',
             style: TextStyle(
               color: Color.fromARGB(255, 255, 255, 255),
               letterSpacing: 1.5,
@@ -276,8 +261,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 30.0,
                         ),
                         _buildPasswordTF(),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         _buildForgotPasswordBtn(),
-                        _buildRememberMeCheckbox(),
                         _buildLoginBtn(),
                         _buildSignupBtn(),
                       ],

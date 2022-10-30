@@ -5,6 +5,7 @@ import 'package:flutter_final_project_tsa/widget/error.dart';
 import 'package:flutter_final_project_tsa/widget/gambar.dart';
 import 'package:flutter_final_project_tsa/widget/kosakata.dart';
 import 'package:flutter_final_project_tsa/widget/listening.dart';
+import 'package:flutter_final_project_tsa/widget/profile.dart';
 import 'package:flutter_final_project_tsa/widget/test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
@@ -73,7 +74,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           );
         })) {
       case "Vacabulari":
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
           return KosaKataWidget(kategori: kategori);
         }));
         break;
@@ -199,7 +200,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         ),
       );
     } on SocketException catch (_) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => const ErrorPage(
@@ -209,7 +210,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         ),
       );
     } catch (e) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) {
@@ -256,7 +257,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         ),
       );
     } on SocketException catch (_) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => const ErrorPage(
@@ -266,7 +267,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         ),
       );
     } catch (e) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) {
@@ -312,7 +313,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         ),
       );
     } on SocketException catch (_) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => const ErrorPage(
@@ -322,7 +323,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         ),
       );
     } catch (e) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) {
@@ -371,11 +372,49 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
-            title: Text(widget.title),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () => _onWillPop,
-            )),
+          title: Text(
+            'Hello World',
+            style: TextStyle(
+              fontFamily: 'Noto Serif',
+              fontSize: 20,
+            ),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (_) => const ProfileWidget(title: "Profile")),
+                );
+              },
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: Image.asset(
+                        'assets/images/ic-user.png',
+                      ).image,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 4,
+                        color: Color(0x33000000),
+                        offset: Offset(0, 2),
+                      )
+                    ],
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            ),
+          ],
+          centerTitle: true,
+          elevation: 4,
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: GestureDetector(

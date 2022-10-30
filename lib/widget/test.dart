@@ -8,8 +8,8 @@ import 'package:flutter_final_project_tsa/model/kata.dart';
 import 'package:flutter_final_project_tsa/network/network_request.dart';
 import 'package:flutter_final_project_tsa/widget/error.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_tts/flutter_tts.dart';
-import 'package:flutter_tts/flutter_tts_web.dart';
+// import 'package:flutter_tts/flutter_tts.dart';
+// import 'package:flutter_tts/flutter_tts_web.dart';
 
 class TestWidget extends StatefulWidget {
   const TestWidget(
@@ -28,7 +28,7 @@ class TestWidget extends StatefulWidget {
 
 class _TestWidgetState extends State<TestWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final FlutterTts flutterTts = FlutterTts();
+  // final FlutterTts flutterTts = FlutterTts();
 
   late int iKuis = widget.nKuis;
   late int scores = widget.score;
@@ -170,11 +170,11 @@ class _TestWidgetState extends State<TestWidget> {
         false;
   }
 
-  Future _speak() async {
-    await flutterTts.setLanguage("en-US");
-    await flutterTts.setPitch(1);
-    await flutterTts.speak(bing);
-  }
+  // Future _speak() async {
+  //   await flutterTts.setLanguage("en-US");
+  //   await flutterTts.setPitch(1);
+  //   await flutterTts.speak(bing);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +213,7 @@ class _TestWidgetState extends State<TestWidget> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
                           child: GestureDetector(
-                            onTap: () => _speak(),
+                            onTap: () {},
                             child: Container(
                               width: 130,
                               height: 130,

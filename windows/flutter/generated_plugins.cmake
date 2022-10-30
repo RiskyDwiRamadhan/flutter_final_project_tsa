@@ -4,7 +4,6 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_webview_auth
-  flutter_tts
   url_launcher_windows
 )
 

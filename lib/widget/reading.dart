@@ -32,7 +32,7 @@ class _ReadingWidgetState extends State<ReadingWidget> {
 
   List<int> sIndex = [0, 1, 2, 3];
   late String bi, bing, sgambar;
-  int indexSoal = Random().nextInt(10);
+  late int indexSoal = Random().nextInt(widget.question.length);
   // Pertanyaan ingris ke indo
   List<String> pertanyaan = [];
   List<String> lGambar = [];
@@ -56,7 +56,7 @@ class _ReadingWidgetState extends State<ReadingWidget> {
 
   void pilihan() async {
     for (int i = 0; i < 3; i++) {
-      int angka = Random().nextInt(10);
+      int angka = Random().nextInt(widget.question.length - 1);
       if (indexSoal != angka) {
         pertanyaan.add(widget.question[angka].bindo.toString());
         lGambar.add(widget.question[angka].gambar.toString());
@@ -112,7 +112,7 @@ class _ReadingWidgetState extends State<ReadingWidget> {
       } else {
         print("Selesai");
         print("Score = $scores");
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (_) => ScoreWidget(
@@ -122,7 +122,7 @@ class _ReadingWidgetState extends State<ReadingWidget> {
         );
       }
     } on SocketException catch (_) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => const ErrorPage(
@@ -132,7 +132,7 @@ class _ReadingWidgetState extends State<ReadingWidget> {
         ),
       );
     } catch (e) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) {
@@ -160,7 +160,15 @@ class _ReadingWidgetState extends State<ReadingWidget> {
               ElevatedButton(
                 child: const Text("Yes"),
                 onPressed: () {
-                  Navigator.pop(context, true);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ScoreWidget(
+                        score: 0,
+                        kategori: widget.question[0].kategori.toString(),
+                      ),
+                    ),
+                  );
                 },
               ),
               ElevatedButton(

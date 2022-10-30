@@ -111,16 +111,17 @@ class _GambarWidgetState extends State<GambarWidget> {
       } else {
         print("Selesai");
         print("Score = $scores");
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => ScoreWidget(
-            score: scores,
-            kategori: kategori,
-          )),
+          MaterialPageRoute(
+              builder: (_) => ScoreWidget(
+                    score: scores,
+                    kategori: kategori,
+                  )),
         );
       }
     } on SocketException catch (_) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => const ErrorPage(
@@ -130,7 +131,7 @@ class _GambarWidgetState extends State<GambarWidget> {
         ),
       );
     } catch (e) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) {
@@ -158,7 +159,15 @@ class _GambarWidgetState extends State<GambarWidget> {
               ElevatedButton(
                 child: const Text("Yes"),
                 onPressed: () {
-                  Navigator.pop(context, true);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ScoreWidget(
+                        score: 0,
+                        kategori: widget.question[0].kategori.toString(),
+                      ),
+                    ),
+                  );
                 },
               ),
               ElevatedButton(

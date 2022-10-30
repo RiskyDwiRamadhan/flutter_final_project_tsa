@@ -9,8 +9,7 @@ import 'package:flutter_final_project_tsa/network/network_request.dart';
 import 'package:flutter_final_project_tsa/widget/error.dart';
 import 'package:flutter_final_project_tsa/widget/kategori.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_tts/flutter_tts.dart';
-import 'package:flutter_tts/flutter_tts_web.dart';
+// import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_final_project_tsa/widget/ScoreWidget.dart';
 
 class ListeningWidget extends StatefulWidget {
@@ -30,7 +29,7 @@ class ListeningWidget extends StatefulWidget {
 
 class _ListeningWidgetState extends State<ListeningWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final FlutterTts flutterTts = FlutterTts();
+  // final FlutterTts flutterTts = FlutterTts();
 
   late int iKuis = widget.nKuis;
   late int scores = widget.score;
@@ -117,17 +116,17 @@ class _ListeningWidgetState extends State<ListeningWidget> {
       } else {
         print("Selesai");
         print("Score = $scores");
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => ScoreWidget(
-            score: scores,
-            kategori: kategori,
-          )),
+              builder: (_) => ScoreWidget(
+                    score: scores,
+                    kategori: kategori,
+                  )),
         );
       }
     } on SocketException catch (_) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => const ErrorPage(
@@ -137,7 +136,7 @@ class _ListeningWidgetState extends State<ListeningWidget> {
         ),
       );
     } catch (e) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) {
@@ -165,7 +164,15 @@ class _ListeningWidgetState extends State<ListeningWidget> {
               ElevatedButton(
                 child: const Text("Yes"),
                 onPressed: () {
-                  Navigator.pop(context, true);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ScoreWidget(
+                        score: 0,
+                        kategori: widget.question[0].kategori.toString(),
+                      ),
+                    ),
+                  );
                 },
               ),
               ElevatedButton(
@@ -180,11 +187,11 @@ class _ListeningWidgetState extends State<ListeningWidget> {
         false;
   }
 
-  Future _speak() async {
-    await flutterTts.setLanguage("en-US");
-    await flutterTts.setPitch(1);
-    await flutterTts.speak(bing);
-  }
+  // Future _speak() async {
+  //   await flutterTts.setLanguage("en-US");
+  //   await flutterTts.setPitch(1);
+  //   await flutterTts.speak(bing);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -192,11 +199,8 @@ class _ListeningWidgetState extends State<ListeningWidget> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
-            title: Text("Listening"),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () => _onWillPop,
-            )),
+          title: Text("Listening"),
+        ),
         body: SafeArea(
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
@@ -223,7 +227,7 @@ class _ListeningWidgetState extends State<ListeningWidget> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(10, 10, 0, 0),
                           child: GestureDetector(
-                            onTap: () => _speak(),
+                            onTap: () {},
                             child: Container(
                               width: 130,
                               height: 130,

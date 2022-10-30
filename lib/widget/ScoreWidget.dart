@@ -36,7 +36,7 @@ class _ScoreWidgetState extends State<ScoreWidget> {
   }
 
   _star() {
-    if (widget.score == 20) {
+    if (widget.score >= 0 && widget.score <= 20) {
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +48,7 @@ class _ScoreWidgetState extends State<ScoreWidget> {
           _starlineWidget(),
         ],
       );
-    } else if (widget.score == 40) {
+    } else if (widget.score > 20 && widget.score <= 40) {
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +60,7 @@ class _ScoreWidgetState extends State<ScoreWidget> {
           _starlineWidget(),
         ],
       );
-    } else if (widget.score == 60) {
+    } else if (widget.score > 40 && widget.score <= 60) {
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +72,7 @@ class _ScoreWidgetState extends State<ScoreWidget> {
           _starlineWidget(),
         ],
       );
-    } else if (widget.score == 80) {
+    } else if (widget.score > 60 && widget.score < 100) {
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +234,7 @@ class _ScoreWidgetState extends State<ScoreWidget> {
                                 ),
                               ),
                               onPressed: () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) =>

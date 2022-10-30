@@ -47,20 +47,12 @@ class _KosaKataWidgetState extends State<KosaKataWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        print("Kembali ke menu kategori");
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-            title: Text('Vocabulary'),
-            automaticallyImplyLeading: false,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () => Navigator.pop(context,true ),
-            )),
-        body: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Vocabulary'),
+      ),
+      body: SafeArea(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
